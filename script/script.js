@@ -1,6 +1,14 @@
-const API = 'https://api.tvmaze.com/search/shows?q=girls';
+const APIraw = 'https://api.tvmaze.com/search/shows?q=';
 const itemWrap = document.querySelector('.item__wrap');
-// const inp = document.querySelector('.inp');
+const inp = document.querySelector('.inp');
+const btn = document.querySelector('.btn');
+
+btn.addEventListener('click', () => {
+    let API = APIraw + inp.value;
+    console.log('API in',API);
+    getData(API);
+    inp.value = '';
+});
 
 const createTemplate = (data) => {
 
@@ -31,16 +39,18 @@ const createTemplate = (data) => {
     `
 }
 
-fetch(API)
-    .then(response => response.json())
-    .then(data => {
-        if (data) {
-            data.forEach(item => {
-                console.log('data',item);
-                itemWrap.innerHTML += createTemplate(item);
-            })
-        }
-    })
-    .catch(err => {
-        throw (new Error(err))
-    })
+function getData(value) {
+    fetch(value)
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                itemWrap.innerHTML = '';
+                data.forEach(item => {
+                    itemWrap.innerHTML += createTemplate(item);
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
